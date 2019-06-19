@@ -32,7 +32,7 @@ public class PessoaBeanTest {
 //		PessoaDao dao = new PessoaDao();
 //		
 //		dao.save(pessoa);
-		
+//		
 //		TarefaDao dao = new TarefaDao();
 //		dao.save(tarefa3);
 		///////////////////////////////
@@ -50,6 +50,6 @@ public class PessoaBeanTest {
 		tarefas.add(t1);
 		p1.setTarefas(tarefas);
 		
-		pdao.save(p1);
+		pdao.save(p1); 
 	}
 }

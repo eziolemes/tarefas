@@ -31,7 +31,12 @@ public class TarefaServlet extends HttpServlet {
 	
 	protected void doExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String parametro = request.getParameter("acao");
+		String parametro = request.getParameter("logica");
+		
+		if(parametro == null) {
+			parametro = "TelaInicial";
+		}
+		
 		String nomeDaClasse = "br.com.ezio.tarefas.bo." + parametro;
 		
 		try {

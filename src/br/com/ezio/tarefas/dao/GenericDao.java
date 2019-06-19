@@ -61,7 +61,6 @@ public class GenericDao<T extends BaseEntity> {
 	}
 	
 	public List<T> findAll(String table) {
-		System.out.println("entrou no método findAll do genericDao");
 		EntityManager em = new ConnectionFactory().getConnection();
 		List<T> produtos = null;
 		
