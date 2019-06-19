@@ -1,13 +1,33 @@
 package br.com.ezio.tarefas.dao;
 
-import br.com.ezio.tarefas.bean.PessoaBean;
+import java.sql.SQLException;
+import java.util.List;
+
+import br.com.ezio.tarefas.bean.BaseEntity;
 
 /**
  * 
  * @author Ezio Lemes
  *
  */
-public class PessoaDao extends GenericDao<PessoaBean>{
+public class PessoaDao extends GenericDao{
 
-	//aqui será implementados os métodos específicos.
+	@Override
+	public void insert(BaseEntity bean) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(BaseEntity bean) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<BaseEntity> find(String sql) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

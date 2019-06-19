@@ -21,6 +21,7 @@ public class PrimeiraLogica implements Logica{
 		TarefaDao tdao = new TarefaDao();
 		PessoaDao pdao = new PessoaDao();
 		
+		/*
 		t1 = tdao.findById(TarefaBean.class, 3);
 		p1 = pdao.findById(PessoaBean.class, 1);
 		
@@ -29,6 +30,7 @@ public class PrimeiraLogica implements Logica{
 		p1.setTarefas(tarefas);
 		
 		pdao.save(p1);
+		*/
 	}
 
 	

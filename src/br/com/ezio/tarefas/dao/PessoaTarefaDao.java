@@ -1,0 +1,110 @@
+package br.com.ezio.tarefas.dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.ezio.tarefas.bean.PessoaTarefaBean;
+
+public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
+	
+	@Override
+	public void insert(PessoaTarefaBean bean) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("INSERT INTO PESSOA_TAREFA(PESTAR_TAREFA_ID, PESTAR_PESSOA_ID, PESTAR_PERCENTUAL, PESTAR_DATA_INICIO, PESTAR_DATA_FIM, PESTAR_FINALIZADO)");
+		sql.append(" VALUES(?, ?, ?, ?, ?, ?);");
+		
+		PreparedStatement ps = conn.prepareStatement(sql.toString());
+		ps.setInt(1, bean.getTarefa().getId());
+		ps.setInt(2, bean.getPessoa().getId());
+		ps.setBigDecimal(3, bean.getPercentual());
+		ps.setDate(4, new java.sql.Date( bean.getDataInicio().getTime() ));
+		ps.setDate(5, new java.sql.Date( bean.getDataFim().getTime() ));
+		ps.setString(6, (bean.getFinalizado() ? "S" : "N") );
+		
+		ps.execute();
+		ps.close();
+		conn.close();
+	}
+
+	@Override
+	public void update(PessoaTarefaBean bean) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public List<PessoaTarefaBean> find(String where) throws SQLException {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("SELECT PESTAR_ID," + pl);
+		sb.append("       PESTAR_TAREFA_ID," + pl);
+		sb.append("       TAR_DESCRICAO," + pl);
+		sb.append("       PESTAR_PESSOA_ID," + pl);
+		sb.append("       PES_NOME," + pl);
+		sb.append("       PESTAR_PERCENTUAL," + pl);
+		sb.append("       PESTAR_DATA_INICIO," + pl);
+		sb.append("       PESTAR_DATA_FIM," + pl);
+		sb.append("       PESTAR_FINALIZADO" + pl);
+		sb.append("FROM PESSOA_TAREFA" + pl);
+		sb.append("INNER JOIN PESSOA ON PESSOA.PES_ID = PESSOA_TAREFA.PESTAR_PESSOA_ID" + pl);
+		sb.append("INNER JOIN TAREFA ON TAREFA.TAR_ID = PESSOA_TAREFA.PESTAR_TAREFA_ID" + pl);
+		sb.append(where);
+		sb.append("ORDER BY ");
+		
+		PreparedStatement ps = conn.prepareStatement(sql);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		List<PessoaTarefaBean> lista = new ArrayList();
+		
+		while(rs.next()) {
+			PessoaTarefaBean bean = new PessoaTarefaBean();
+			
+			bean.setId(rs.getInt("PESTAR_ID"));
+			bean.getTarefa().setId(rs.getInt("PESTAR_TAREFA_ID"));
+			bean.getTarefa().setDescricao(rs.getString("TAR_DESCRICAO"));
+			bean.getPessoa().setId(rs.getInt("PESTAR_PESSOA_ID"));
+			bean.getPessoa().setNome(rs.getString("PES_NOME"));
+			bean.setPercentual(rs.getBigDecimal("PESTAR_PERCENTUAL"));
+			bean.setDataInicio(rs.getDate("PESTAR_DATA_INICIO"));
+			bean.setDataFim(rs.getDate("PESTAR_DATA_FIM"));
+			bean.setFinalizado( (rs.getString("PESTAR_FINALIZADO").equals("S") ? true : false) );
+			
+			lista.add(bean);
+		}
+		
+		return lista;
+	}
+
+	
+	/*
+	@Override
+	public String queryInsert(PessoaTarefaBean bean) throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String queryUpdate(PessoaTarefaBean bean) throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String querySelect(PessoaTarefaBean bean) throws NullPointerException {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("INSERT INTO PESSOA_TAREFA(PESTAR_TAREFA_ID, PESTAR_PESSOA_ID, PESTAR_PERCENTUAL, PESTAR_DATA_INICIO, PESTAR_DATA_FIM, PESTAR_FINALIZADO)");
+		sb.append("");
+		
+		
+		return sb.toString();
+	}
+
+*/
+
+}

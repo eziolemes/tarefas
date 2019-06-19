@@ -1,8 +1,8 @@
 package br.com.ezio.tarefas.dao;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import br.com.ezio.tarefas.bean.BaseEntity;
 import br.com.ezio.tarefas.factory.ConnectionFactory;
@@ -12,90 +12,43 @@ import br.com.ezio.tarefas.factory.ConnectionFactory;
  * @author Ezio Lemes
  *
  */
-public class GenericDao<T extends BaseEntity> {
+public abstract class GenericDao<T extends BaseEntity> {
 	
-	//TODO criar um update, pois todo insert na tab de rel terá uma id
-	public T save(T t) {
-		EntityManager em = new ConnectionFactory().getConnection();
-		
+	protected String pl = "\n";
+	protected Connection conn;
+	
+	public GenericDao() {
 		try {
-			
-			em.getTransaction().begin();
-			
-			if(t.getId() == null) {
-				
-				System.out.println("persist");
-				em.persist(t);
-			} else {
-				System.out.println("merge");
-				em.merge(t);
-			}
-			
-			em.getTransaction().commit();
-			
-		} catch (Exception e) {
+			conn = new ConnectionFactory().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		//	em.getTransaction().rollback();
-		}finally {
-			em.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		return t;
 	}
 	
-	public T findById(Class<T> clazz, Integer id) {
-		EntityManager em = new ConnectionFactory().getConnection();
-		T t = null;
+	public abstract void insert(T bean) throws SQLException;
+	
+	public abstract void update(T bean) throws SQLException;
+	
+	public abstract List<T> find(String sql) throws SQLException;
+	
+	/*
+	public void save(String sql) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(sql);
 		
-		try {
-			
-			t = em.find(clazz, id);
-			
-		} catch (Exception e) {
-			System.err.println(e);
-		} finally {
-			em.close();
-		}
-		
-		return t;
+		ps.execute();
+		ps.close();
+		conn.close();
 	}
 	
-	public List<T> findAll(String table) {
-		EntityManager em = new ConnectionFactory().getConnection();
-		List<T> produtos = null;
-		
-		try {
-			
-			produtos = em.createQuery("from " + table + " t").getResultList();
-			
-		} catch (Exception e) {
-			System.err.println(e);
-		} finally {
-			em.close();
-		}
-		
-		return produtos;
-	}
+	public abstract String queryInsert(T bean) throws NullPointerException;
 	
-	public T remove(Class<T> clazz, Integer id) {
-		EntityManager em = new ConnectionFactory().getConnection();
-		T t = null;
-		
-		try {
-			
-			t = em.find(clazz, id);
-			em.getTransaction().begin();
-			em.remove(t);
-			em.getTransaction().commit();
-			
-		} catch (Exception e) {
-			System.err.println(e);
-			em.getTransaction().rollback();
-		} finally {
-			em.close();
-		}
-		
-		return t;
-	}
+	public abstract String queryUpdate(T bean) throws NullPointerException;
+	
+	public abstract String querySelect(T bean) throws NullPointerException;
+	*/
 	
 }

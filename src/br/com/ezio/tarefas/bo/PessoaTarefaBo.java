@@ -1,27 +1,24 @@
 package br.com.ezio.tarefas.bo;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.ezio.tarefas.bean.PessoaBean;
-import br.com.ezio.tarefas.dao.PessoaDao;
+import br.com.ezio.tarefas.dao.PessoaTarefaDao;
 
 public class PessoaTarefaBo implements Logica {
 
 	@Override
 	public void executa(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		PessoaDao dao = new PessoaDao();
-		List<PessoaBean> lista = new ArrayList();
+		PessoaTarefaDao dao = new PessoaTarefaDao();
 		
-		lista = dao.findAll("PESSOA_HAS_TAREFAS");
+		List<PessoaTarefaBean> lista = dao.find(  )
 		
-		HtmlBo bo = new HtmlBo();
-		
-		bo.getHomePage(lista);
 	}
+	
+	
+	
+	
 
 }

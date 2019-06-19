@@ -2,13 +2,13 @@ package br.com.ezio.tarefas.bo;
 
 import java.util.List;
 
-import br.com.ezio.tarefas.bean.PessoaBean;
+import br.com.ezio.tarefas.bean.PessoaTarefaBean;
 import br.com.ezio.tarefas.view.ComponentsHtml;
 import br.com.ezio.tarefas.view.HeaderHtml;
 
 public class HtmlBo {
 
-	public String getHomePage(List<PessoaBean> listaPessoasTarefas) throws NullPointerException {
+	public String getHomePage(List<PessoaTarefaBean> listaPessoasTarefas) throws NullPointerException {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -31,16 +31,15 @@ public class HtmlBo {
 		Object[][] dados = new Object[][]{};
 
 		for (int i = 0; i < listaPessoasTarefas.size(); i++) {
-			PessoaBean p = listaPessoasTarefas.get(i);
+			PessoaTarefaBean p = listaPessoasTarefas.get(i);
 			dados[i][0] = p.getId();
-			dados[i][1] = p.getTarefas().get(i).getDescricao();
-			dados[i][2] = p.getNome();
+			dados[i][1] = p.getTarefa().getDescricao();
+			dados[i][2] = p.getPessoa().getNome();
 			dados[i][3] = p.getDataInicio();
 			dados[i][4] = p.getPercentual();
 			dados[i][5] = p.getFinalizado();
 			dados[i][6] = "<a href=\"\">Editar</a> <a href=\"\">Excluir</a>";
 		}
-
 
 		ComponentsHtml ch = new ComponentsHtml("Atividades");
 
