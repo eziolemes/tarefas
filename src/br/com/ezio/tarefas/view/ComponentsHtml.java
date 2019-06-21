@@ -249,6 +249,8 @@ public class ComponentsHtml {
 		sb.append( (input.getMaxlength() != null ? " maxlength=\"" + input.getMaxlength() + "\" ": "") );
 		sb.append( (input.getValue() != null ? " value=\"" + input.getValue() + "\" ": "") );
 		sb.append( (input.getRequired() != null ? (input.getRequired() ? " required " : "" ) : "") );
+		sb.append( (input.getReadonly() != null ? (input.getReadonly() ? " readonly " : "" ) : "") );
+		sb.append( (input.getChecked() != null ? (input.getChecked() ? " checked " : "" ) : "" ) );
 		sb.append(" >" + pl);
 
 		return sb.toString();

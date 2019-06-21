@@ -12,6 +12,8 @@ public class InputHtml {
 	private String placeholder;
 	private Boolean required;
 	private String urlImg;
+	private Boolean readonly;
+	private Boolean checked;
 	
 	public String getId() {
 		return id;
@@ -72,5 +74,17 @@ public class InputHtml {
 	}
 	public void setUrlImg(String urlImg) {
 		this.urlImg = urlImg;
+	}
+	public Boolean getReadonly() {
+		return readonly;
+	}
+	public void setReadonly(Boolean readonly) {
+		this.readonly = readonly;
+	}
+	public Boolean getChecked() {
+		return checked;
+	}
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
 	}
 }

@@ -1,4 +1,4 @@
-/* Limpar as formatações padrão */
+/* Limpar as formataï¿½ï¿½es padrï¿½o */
 * {
 	margin: 0;
 	padding: 0;
@@ -58,7 +58,7 @@ body {
 }
 
 /*
-**** Formatação do menu ****
+**** Formataï¿½ï¿½o do menu ****
 */
 a {
 	text-decoration: none;
@@ -86,7 +86,7 @@ a:hover {
 
 
 /*
-**** Formatações em geral ****
+**** Formataï¿½ï¿½es em geral ****
 */
 .branco {
 	color: white;
@@ -140,5 +140,6 @@ form label {
 	background: #f7b600;
 	color: white;
 	position: absolute;
-	bottom: 45px;
+	top: 200px;
+	left: 40%;
 }

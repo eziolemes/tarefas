@@ -4,6 +4,7 @@ public class PessoaBean implements BaseEntity{
 	
 	private Integer id;
 	private String nome;
+	private Boolean ativo;
 	
 	@Override
 	public Integer getId() {
@@ -20,6 +21,14 @@ public class PessoaBean implements BaseEntity{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
 
 }

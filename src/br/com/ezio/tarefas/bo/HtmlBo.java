@@ -1,10 +1,8 @@
 package br.com.ezio.tarefas.bo;
 
 import java.util.List;
-
 import br.com.ezio.tarefas.bean.PessoaBean;
 import br.com.ezio.tarefas.bean.PessoaTarefaBean;
-import br.com.ezio.tarefas.view.AHtml;
 import br.com.ezio.tarefas.view.ComponentsHtml;
 import br.com.ezio.tarefas.view.DivHtml;
 import br.com.ezio.tarefas.view.FormHtml;
@@ -29,15 +27,15 @@ public class HtmlBo {
 		// cria os itens do menu
 		itensMenu = new String[5][5];
 		itensMenu[0][0] = "Início";     itensMenu[0][1] = "index";
-		itensMenu[1][0] = "Progresso";  itensMenu[1][1] = "index?logica=PessoaTarefaBo&acao=listarProgresso";
-		itensMenu[2][0] = "Atividades"; itensMenu[2][1] = "index?logica=TarefaBo&acao=listarAtividades";
-		itensMenu[3][0] = "Pessoas";    itensMenu[3][1] = "index?logica=PessoaBo&acao=listarPessoas";
+		itensMenu[1][0] = "Progresso";  itensMenu[1][1] = "index?logica=PessoaTarefaBo&acao=listar";
+		itensMenu[2][0] = "Atividades"; itensMenu[2][1] = "index?logica=TarefaBo&acao=listar";
+		itensMenu[3][0] = "Pessoas";    itensMenu[3][1] = "index?logica=PessoaBo&acao=listar";
 		itensMenu[4][0] = "Contato";    itensMenu[4][1] = "index?acao=contato";
 
 		ch = new ComponentsHtml("Atividades");
 	}
-	
-	public String getPersonForm() {
+
+	public String getPersonForm(PessoaBean pessoa) {
 		StringBuilder sb = new StringBuilder();
 
 		FormHtml form = new FormHtml();
@@ -45,10 +43,11 @@ public class HtmlBo {
 		form.setAction("index");
 		form.setLegend("Cadastrar Pessoa");
 
-		InputHtml hiddenInput = new InputHtml();
-		hiddenInput.setType("hidden");
-		hiddenInput.setName("acao");
-		hiddenInput.setValue("gravarPessoa");
+
+		InputHtml acaoInput = new InputHtml();
+		acaoInput.setType("hidden");
+		acaoInput.setName("acao");
+		acaoInput.setValue("gravar");
 
 		InputHtml logicaInput = new InputHtml();
 		logicaInput.setType("hidden");
@@ -74,7 +73,6 @@ public class HtmlBo {
 		divFormRow.setClassCss("form-group row");
 
 		DivHtml divFormCol = new DivHtml();
-		divFormCol.setClassCss("col-lg-5");
 
 		LabelHtml label = new LabelHtml();
 		label.setId(nameInput.getId());
@@ -84,6 +82,12 @@ public class HtmlBo {
 		alertaDiv.setId("aviso");
 		alertaDiv.setStyle("display: none;");
 
+		if(pessoa != null) {
+			form.setLegend("Editar Pessoa");
+			acaoInput.setValue("editar");
+			nameInput.setValue(pessoa.getNome());
+		}
+
 		sb.append(ch.openDocumentHtml());
 		sb.append(ch.openHeadHtml());
 		sb.append(ch.getTitle("Início"));
@@ -91,7 +95,6 @@ public class HtmlBo {
 		sb.append(ch.getLinkCSS("estilos/css/estilo.css"));
 		sb.append(ch.getScript("estilos/jquery/jquery-3.3.1.js"));
 
-		//teste
 		sb.append(ch.getScriptAlertJQuery());
 		sb.append(ch.closeHeadHtml());
 		sb.append(ch.openBodyHtml());
@@ -100,14 +103,74 @@ public class HtmlBo {
 		sb.append(ch.openDivMain());
 
 		sb.append(ch.openFormHtml(form));
-		sb.append(ch.getInput(hiddenInput));
+		sb.append(ch.getInput(acaoInput));
 		sb.append(ch.getInput(logicaInput));
+
+		if(pessoa != null) {
+			// input código
+
+			divFormCol.setClassCss("col-lg-2");
+
+			LabelHtml idLabel = new LabelHtml();
+			idLabel.setId("id");
+			idLabel.setValue("Código:");
+
+			InputHtml IdInput = new InputHtml();
+			IdInput.setType("text");
+			IdInput.setName("id");
+			IdInput.setId("id");
+			IdInput.setValue(pessoa.getId().toString());
+			IdInput.setPlaceholder("Informe Código");
+			IdInput.setMaxlength("100");
+			IdInput.setRequired(true);
+			IdInput.setClassCss("form-control");
+			IdInput.setReadonly(true);
+
+			sb.append(ch.openDivHtml(divFormRow, 4));
+
+			sb.append(ch.openDivHtml(divFormCol, 5));
+			sb.append(ch.getLabel(idLabel));
+			sb.append(ch.getInput(IdInput));
+			sb.append(ch.closeDivHtml(5));
+			sb.append(ch.closeDivHtml(4));
+		}
+
+		// Input nome
+		divFormCol.setClassCss("col-lg-5");
 		sb.append(ch.openDivHtml(divFormRow, 4));
 		sb.append(ch.openDivHtml(divFormCol, 5));
 		sb.append(ch.getLabel(label));
 		sb.append(ch.getInput(nameInput));
 		sb.append(ch.closeDivHtml(5));
 		sb.append(ch.closeDivHtml(4));
+		
+		if(pessoa != null) {
+			
+			LabelHtml ativoLabel = new LabelHtml();
+			ativoLabel.setId("ativo");
+			ativoLabel.setValue("Ativo");
+			
+			InputHtml ativoInput = new InputHtml();
+			ativoInput.setId("ativo");
+			ativoInput.setName("ativo");
+			ativoInput.setType("checkbox");
+			ativoInput.setValue("S");
+			
+			if(pessoa.getAtivo()) {
+				ativoInput.setChecked(true);
+			} else {
+				ativoInput.setChecked(false);
+			}
+			
+			divFormCol.setClassCss("col-lg-2");
+			sb.append(ch.openDivHtml(divFormRow, 4));
+			sb.append(ch.openDivHtml(divFormCol, 5));
+			sb.append(ch.getInput(ativoInput));
+			sb.append(ch.getLabel(ativoLabel));
+			sb.append(ch.closeDivHtml(5));
+			sb.append(ch.closeDivHtml(4));
+		}
+		
 
 		sb.append(ch.getInput(submitInput));
 		sb.append(ch.closeFormHtml());
@@ -126,7 +189,7 @@ public class HtmlBo {
 	public String getPersonList(List<PessoaBean> listaPessoas, String alerta) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		String[] colunasTabela = new String[] {"Código", "Nome", "Ações"};
+		String[] colunasTabela = new String[] {"Código", "Nome", "Ativo", "Ações"};
 
 		Object[][] dados = new Object[listaPessoas.size()][colunasTabela.length];
 
@@ -135,8 +198,9 @@ public class HtmlBo {
 
 			dados[i][0] = pessoa.getId();
 			dados[i][1] = pessoa.getNome();
-			dados[i][2] = "<a href=\"index?logica=PessoaBo&acao=editar&id=" + pessoa.getId() + "\" class=\"botaoTabela\"><img src=\"estilos/img/note_add.png\"></a>\n     " + 
-			              "<a href=\"javascript:func()\" onclick=\"confirmacao('" + pessoa.getId() + "')\" ><img src=\"estilos/img/delete.png\"></a>";
+			dados[i][2] = (pessoa.getAtivo() ? "Sim" : "Não");
+			dados[i][3] = "<a href=\"index?logica=PessoaBo&acao=formularioEditar&id=" + pessoa.getId() + "\" class=\"botaoTabela\"><img src=\"estilos/img/note_add.png\"></a>\n     " + 
+					"<a href=\"javascript:func()\" onclick=\"confirmacao('" + pessoa.getId() + "')\" ><img src=\"estilos/img/delete.png\"></a>";
 		}
 
 		sb.append(ch.openDocumentHtml());
@@ -156,10 +220,11 @@ public class HtmlBo {
 		sb.append(ch.getDivHeaderHtml(header));
 		sb.append(ch.getHorizontalMenuHtml(itensMenu));
 		sb.append(ch.openDivMain());
-		sb.append(ch.getDivTopoConteudo("Lista de Pessoas","index?logica=PessoaBo&acao=formularioCadastroPessoa"));
+		sb.append(ch.getDivTopoConteudo("Lista de Pessoas","index?logica=PessoaBo&acao=formularioCadastro"));
 
 		sb.append(ch.getTableHtml("tabela", colunasTabela, dados));
-
+		sb.append(ch.closeDivMain());
+		sb.append(ch.getDivFooterHtml("Todos os direitos reservados"));
 		if(alerta != null) {
 			DivHtml	alertaDiv = new DivHtml();
 			alertaDiv.setId("aviso");
@@ -169,9 +234,6 @@ public class HtmlBo {
 			sb.append(alerta);
 			sb.append(ch.closeDivHtml(3));
 		}
-
-		sb.append(ch.closeDivMain());
-		sb.append(ch.getDivFooterHtml("Todos os direitos reservados"));
 		sb.append(ch.closeBody());
 		sb.append(ch.closeDocumentHtml());
 
@@ -207,7 +269,7 @@ public class HtmlBo {
 		sb.append(ch.getScript("estilos/datatables/DataTables-1.10.18/js/jquery.dataTables.min.js"));
 		sb.append(ch.getScript("estilos/datatables/DataTables-1.10.18/js/dataTables.bootstrap.min.js"));
 		sb.append(ch.getScriptDataTable("tabela"));
-		sb.append(ch.getScriptConfirm("Deseja excluir esta atividade?", "index?acao=excluirAtividade&idAtividade="));
+		sb.append(ch.getScriptConfirm("Deseja excluir esta atividade?", "index?logica=PessoaBo&acao=excluir&id="));
 		sb.append(ch.closeHeadHtml());
 		sb.append(ch.openBodyHtml());
 		sb.append(ch.getDivHeaderHtml(header));
@@ -223,7 +285,7 @@ public class HtmlBo {
 
 		return sb.toString();
 	}
-	
+
 	public String criarMensagemJavascript(String mensagem) {
 
 		if(mensagem == null) {
@@ -231,8 +293,8 @@ public class HtmlBo {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		
-		
+
+
 		DivHtml	alertaDiv = new DivHtml();
 		alertaDiv.setId("aviso");
 		alertaDiv.setStyle("display: none;");
