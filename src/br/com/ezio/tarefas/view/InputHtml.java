@@ -2,7 +2,7 @@ package br.com.ezio.tarefas.view;
 
 public class InputHtml {
 	
-	private String label;
+	//private String label;
 	private String id;
 	private String classCss;
 	private String type;
@@ -11,16 +11,17 @@ public class InputHtml {
 	private String maxlength;
 	private String placeholder;
 	private Boolean required;
+	private String urlImg;
 	
 	public String getId() {
 		return id;
 	}
-	public String getLabel() {
-		return label;
-	}
-	public void setLabel(String label) {
-		this.label = label;
-	}
+//	public String getLabel() {
+//		return label;
+//	}
+//	public void setLabel(String label) {
+//		this.label = label;
+//	}
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -65,5 +66,11 @@ public class InputHtml {
 	}
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+	public String getUrlImg() {
+		return urlImg;
+	}
+	public void setUrlImg(String urlImg) {
+		this.urlImg = urlImg;
 	}
 }

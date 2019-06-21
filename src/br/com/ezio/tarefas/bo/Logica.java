@@ -5,6 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface Logica {
 
-	public void executa(HttpServletRequest request, HttpServletResponse ressponse) throws Exception;
+	public void executa(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 }

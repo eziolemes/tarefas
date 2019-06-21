@@ -113,6 +113,22 @@ public class ComponentsHtml {
 		return sb.toString();
 	}
 
+	public String getScriptAlertJQuery() throws NullPointerException {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append( getTab(2) + "<script type=\"text/javascript\" class=\"init\">" + pl);
+		sb.append( getTab(3) + "$(function(){" + pl);
+		sb.append( getTab(4) + "$(\"#aviso\").fadeIn(700, function(){" + pl);
+		sb.append( getTab(5) + "window.setTimeout(function(){" + pl);
+		sb.append( getTab(6) + "$('#aviso').fadeOut();" + pl);
+		sb.append( getTab(5) + "}, 6000);" + pl);
+		sb.append( getTab(4) + "});" + pl);
+		sb.append( getTab(3) + "});" + pl);
+		sb.append( getTab(2) + "</script>" + pl);
+
+		return sb.toString();
+	}
+
 	/**
 	 * Cria o script que configura uma tabela com o DataTable. 
 	 * 
@@ -126,17 +142,17 @@ public class ComponentsHtml {
 		sb.append( getTab(3) + "$(document).ready(function() {" + pl);
 		sb.append( getTab(4) + "$('#" + tableName + "').DataTable({" + pl);
 		sb.append( getTab(5) + "\"language\": {" + pl);
-		sb.append( getTab(6) + "\"lengthMenu\": \"Exibindo _MENU_ registros por pÃ¡gina\"," + pl);
+		sb.append( getTab(6) + "\"lengthMenu\": \"Exibindo _MENU_ registros por página\"," + pl);
 		sb.append( getTab(6) + "\"zeroRecords\": \"Nada encontrado\"," + pl);
-		sb.append( getTab(6) + "\"info\": \"Mostrando pÃ¡gina _PAGE_ de _PAGES_\"," + pl);
-		sb.append( getTab(6) + "\"infoEmpty\": \"Nenhum registro disponÃ­vel\"," + pl);
+		sb.append( getTab(6) + "\"info\": \"Mostrando página _PAGE_ de _PAGES_\"," + pl);
+		sb.append( getTab(6) + "\"infoEmpty\": \"Nenhum registro disponível\"," + pl);
 		sb.append( getTab(6) + "\"infoFiltered\": \"(Filtrados de _MAX_ registros)\"," + pl);
 		sb.append( getTab(6) + "\"sSearch\": \"Pesquisar\"," + pl);
 		sb.append( getTab(6) + "\"oPaginate\": {" + pl);
-		sb.append( getTab(7) + "\"sNext\": \"PrÃ³ximo\"," + pl);
+		sb.append( getTab(7) + "\"sNext\": \"Próximo\"," + pl);
 		sb.append( getTab(7) + "\"sPrevious\": \"Anterior\"," + pl);
 		sb.append( getTab(7) + "\"sFirst\": \"Primeiro\"," + pl);
-		sb.append( getTab(7) + "\"sLast\": \"Ãšltimo\"" + pl);
+		sb.append( getTab(7) + "\"sLast\": \"Último\"" + pl);
 		sb.append( getTab(6) + "}" + pl);
 		sb.append( getTab(5) + "}" + pl);
 		sb.append( getTab(4) + "});" + pl);
@@ -147,7 +163,7 @@ public class ComponentsHtml {
 	}
 
 	/**
-	 * Cria a div rodapÃ©.
+	 * Cria a div rodapé.
 	 * 
 	 * @param value
 	 * @return String
@@ -155,7 +171,7 @@ public class ComponentsHtml {
 	public String getDivFooterHtml(String value) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( getTab(2) + "<div class=\"footer\">" + pl);
+		sb.append( getTab(2) + "<div id=\"area-rodape\" class=\"footer navbar-fixed-bottom\">" + pl);
 		sb.append( getTab(2) + value + pl);
 		sb.append( getTab(2) + "</div>" + pl);
 
@@ -165,65 +181,58 @@ public class ComponentsHtml {
 	public String getDivHeaderHtml(HeaderHtml header) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( getTab(3) + "<div class=\"header\">" + pl);
-		sb.append( getTab(4) + "<h4><a href=\"" + header.getHrefIndex() + "\" id=\"buttonHome\"><img src=\"" + header.getUrlIconImg() + "\" alt=\"index\">" + header.getTitulo() + "</a></h4>" + pl);
+		sb.append( getTab(3) + "<div id=\"area-cabecalho\">" + pl);
+		sb.append( getTab(4) + "<div id=\"area-logo\">" + pl);
+		sb.append( getTab(5) + "<h1><a href=\"" + header.getHrefIndex() + "\" id=\"buttonHome\"><img src=\"" + header.getUrlIconImg() + "\" alt=\"index\">" + header.getTitulo() + "</a></h1>" + pl);
+		sb.append( getTab(4) + "</div>" + pl);
 		sb.append( getTab(3) + "</div>" + pl);
 
 		return sb.toString();
 	}
 
-	public String openForm(String action, String method, String idCss, String classCss) throws NullPointerException {
+	public String openFormHtml(FormHtml form) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(2) + "<form action=\"" + action + "\" method=\"" + method + "\" " + (idCss != null ? "id=\"" + idCss + "\"" : "") + (classCss != null ? " class=\"" + classCss + "\"" : "") + ">" + pl);
+		sb.append(getTab(2) + "<form action=\"" + form.getAction() + "\" method=\"" + form.getMethod() + "\" " + (form.getId() != null ? "id=\"" + form.getId() + "\"" : "") + (form.getClassCss() != null ? " class=\"" + form.getClassCss() + "\"" : "") + ">" + pl);
+		sb.append(getTab(3) + "<fieldset>" + pl);
+		sb.append(getTab(4) + "<legend>" + form.getLegend() + "</legend>" + pl);
 
 		return sb.toString();
 	}
 
-	public String closeForm() {
+	public String closeFormHtml() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append(getTab(3) + "</fieldset>" + pl);
 		sb.append(getTab(2) + "</form>" + pl);
 
 		return sb.toString();
 	}
 
-	public String openFormRow() {
+	public String openDivHtml(DivHtml div, Integer tabs) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "<div class=\"form-group row\">" + pl);
+		sb.append(getTab(tabs) + "<div ");
+		sb.append( (div.getClassCss() != null ? " class=\"" + div.getClassCss() + "\"" : "" ) );
+		sb.append( (div.getId() != null ? "id=\"" + div.getId() + "\"" : "" ) );
+		sb.append( (div.getStyle() != null ? "style=\"" + div.getStyle() + "\"" : "" ) );
+		sb.append(">" + pl);
 
 		return sb.toString();
 	}
 
-	public String closeFormRow() {
+	public String closeDivHtml(Integer tabs) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "</div>" + pl);
+		sb.append(getTab(tabs) + "</div>" + pl);
 
 		return sb.toString();
 	}
 
-	public String openFormColumn(Integer size) throws NullPointerException {
+	public String getLabel(LabelHtml label) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "<div class=\"col-lg-" + size + "\">" + pl);
-
-		return sb.toString();
-	}
-
-	public String closeFormColumn() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(getTab(3) + "</div>" + pl);
-
-		return sb.toString();
-	}
-
-	public String getLabel(String value, String forLabel) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(getTab(3) + "<label for=\"" + forLabel + "\">" + value + "</label> " + pl);
+		sb.append(getTab(3) + "<label for=\"" + label.getId() + "\">" + label.getValue() + "</label> " + pl);
 
 		return sb.toString();
 	}
@@ -263,103 +272,132 @@ public class ComponentsHtml {
 	public String getHorizontalMenuHtml(String[][] itens ) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "<div id=\"menuHorizontal\">" + pl);
+		sb.append(getTab(3) + "<div id=\"area-menu\">" + pl);
 
 		sb.append(getTab(4));
 		for(int i=0; i<itens.length; i++) {
 			sb.append("<a href=\"" + itens[i][1] + "\">" + itens[i][0] + "</a>");
 		}
 
+		sb.append(pl + getTab(3) + "</div>" + pl);
+
+		return sb.toString();
+	}
+
+	public String openDivMain() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(getTab(2) + "<div id=\"area-principal\">" + pl);
+
+		return sb.toString();
+	}
+
+	public String closeDivMain() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(getTab(2) + "</div>" + pl);
+
+		return sb.toString();
+	}
+
+	public String getDivTopoConteudo(String label, String urlButton) throws NullPointerException {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(getTab(3) + "<div id=\"topo-conteudo\">" + pl);
+		sb.append(getTab(4) + "<h3>" + label + "</h3>" + pl);
+		sb.append(getTab(4) + "<a href=\"" + urlButton + "\" class=\"botao\"><img src=\"estilos/img/Add.png\"></span>Incluir</a>" + pl);
 		sb.append(getTab(3) + "</div>" + pl);
 
 		return sb.toString();
 	}
 
-	public String getH3(String value) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
+	//	public String openTableHtml(String id) throws NullPointerException {
+	//		StringBuilder sb = new StringBuilder();
+	//
+	//		sb.append("<table id=\"" + id + "\" class=\"table table-striped table-bordered\" style=\"width:100%\">" + pl);
+	//
+	//		return sb.toString();
+	//	}
 
-		sb.append("<h3>" + value + "</h3>" + pl);
+	//	public String getTHeadHtml(String... columns) throws NullPointerException {
+	//		StringBuilder sb = new StringBuilder();
+	//
+	//		sb.append("<thead>" + pl);
+	//		sb.append("<tr>" + pl);
+	//
+	//		for(String column : columns) {
+	//			sb.append("<th>" + column + "</th>" + pl);
+	//		}
+	//
+	//		sb.append("<th>Ações</th>" + pl);
+	//		sb.append("</tr>" + pl);
+	//		sb.append("</thead>" + pl);
+	//
+	//		return sb.toString();
+	//	}
 
-		return sb.toString();
-	}
+	//	public String getTBodyHtml(List<?> itens) throws NullPointerException {
+	//		StringBuilder sb = new StringBuilder();
+	//
+	//		sb.append("<tbody>" + pl);
+	//
+	//		sb.append("</tbody>" + pl);
+	//
+	//		return sb.toString();
+	//	}
 
-	public String getBotaoIncluir(String url) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("<a href=\"" + url + "\" class=\"botao\"><img src=\"img/Add.png\"></span>Incluir</a>" + pl);
-
-		return sb.toString();
-	}
-
-	public String openTableHtml(String id) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("<table id=\"" + id + "\" class=\"table table-striped table-bordered\" style=\"width:100%\">" + pl);
-
-		return sb.toString();
-	}
-	
-	public String getTHeadHtml(String... columns) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("<thead>" + pl);
-		sb.append("<tr>" + pl);
-		
-		for(String column : columns) {
-			sb.append("<th>" + column + "</th>" + pl);
-		}
-		
-		sb.append("<th>Ações</th>" + pl);
-		sb.append("</tr>" + pl);
-		sb.append("</thead>" + pl);
-		
-		return sb.toString();
-	}
-	
-	public String getTBodyHtml(List<?> itens) throws NullPointerException {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("<tbody>" + pl);
-		
-		sb.append("</tbody>" + pl);
-		
-		return sb.toString();
-	}
-	
 	public String getTableHtml(String id, String[] columns, Object[][] data) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("<table id=\"" + id + "\" class=\"table table-striped table-bordered\" style=\"width:100%\">" + pl);
 		sb.append("<thead>" + pl);
 		sb.append("<tr>" + pl);
-		
+
 		for(String column : columns) {
 			sb.append("<th>" + column + "</th>" + pl);
 		}
-		
-		sb.append("<th>Ações</th>" + pl);
+
 		sb.append("</tr>" + pl);
 		sb.append("</thead>" + pl);
 		sb.append("<tbody>" + pl);
-		
+
 		for(int i=0; i<data.length; i++) {
-			
+
 			sb.append("<tr>");
-			
-        	for(int y=0; y<data[i].length; y++) {
-        		
-        		sb.append("    <td>" + data[i][y] + "</td>");
-        		
-        	}
-        	
-        	sb.append("</tr>");
-        	
-        }
-		
+
+			for(int y=0; y<data[i].length; y++) {
+
+				sb.append("    <td" + ( y==(data[i].length -1) ? " class=\"centralizarConteudo\"" : "") + ">" + data[i][y] + "</td>");
+
+			}
+
+			sb.append("</tr>");
+
+		}
+
 		sb.append("</tbody>" + pl);
-		sb.append("</html>" + pl);
-		
+		sb.append("</form>" + pl);
+
 		return sb.toString();
 	}
-	
+
+	public String criarMensagemJavascript(String mensagem) {
+
+		if(mensagem == null) {
+			mensagem = "Ocorreu um erro! Verifique os dados informados.";
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\">" + pl);
+		//sb.append("  window.alert(\"" + mensagem + "\");" + pl);
+		sb.append("  javascript:history.go(-1)" + pl);
+		
+		sb.append("</SCRIPT>" + pl);
+
+		return sb.toString();
+	}
+
+
+
 }

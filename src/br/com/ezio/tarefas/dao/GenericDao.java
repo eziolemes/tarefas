@@ -12,7 +12,7 @@ import br.com.ezio.tarefas.factory.ConnectionFactory;
  * @author Ezio Lemes
  *
  */
-public abstract class GenericDao<T extends BaseEntity> {
+abstract class GenericDao<T extends BaseEntity> {
 	
 	protected String pl = "\n";
 	protected Connection conn;
@@ -29,26 +29,10 @@ public abstract class GenericDao<T extends BaseEntity> {
 		}
 	}
 	
-	public abstract void insert(T bean) throws SQLException;
+	protected abstract void insert(T bean) throws SQLException;
 	
-	public abstract void update(T bean) throws SQLException;
+	protected abstract void update(T bean) throws SQLException;
 	
-	public abstract List<T> find(String sql) throws SQLException;
-	
-	/*
-	public void save(String sql) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement(sql);
-		
-		ps.execute();
-		ps.close();
-		conn.close();
-	}
-	
-	public abstract String queryInsert(T bean) throws NullPointerException;
-	
-	public abstract String queryUpdate(T bean) throws NullPointerException;
-	
-	public abstract String querySelect(T bean) throws NullPointerException;
-	*/
+	protected abstract List<T> find(String where) throws SQLException;
 	
 }

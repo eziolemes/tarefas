@@ -25,8 +25,8 @@ public class ConnectionFactory {
 	 */
 	
 	public Connection getConnection() throws ClassNotFoundException, SQLException{
-		/*String driverName = "org.gjt.mm.mysql.Driver";
-		Class.forName(driverName); */
+		String driverName = "org.gjt.mm.mysql.Driver";
+		Class.forName(driverName);
 		
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/tarefas","root","s3cr3ta");
 	}

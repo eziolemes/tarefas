@@ -30,11 +30,12 @@ public class TarefaServlet extends HttpServlet {
 	}
 	
 	protected void doExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		response.setContentType("text/html;charset=iso-8859-1");
+		
 		String parametro = request.getParameter("logica");
 		
 		if(parametro == null) {
-			parametro = "TelaInicial";
+			parametro = "PessoaTarefaBo";
 		}
 		
 		String nomeDaClasse = "br.com.ezio.tarefas.bo." + parametro;
@@ -45,7 +46,7 @@ public class TarefaServlet extends HttpServlet {
 			Logica logica = (Logica) classe.newInstance();
 			logica.executa(request, response);
 		} catch (Exception e) {
-			throw new ServletException("A lógica causou uma exceção");
+			e.printStackTrace();
 		}
 	}
 
