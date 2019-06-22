@@ -12,6 +12,7 @@ public class PessoaTarefaBean implements BaseEntity {
 	private Date dataInicio;
 	private Date dataFim;
 	private Boolean finalizado;
+	private Boolean ativo;
 	
 	public Integer getId() {
 		return id;
@@ -54,6 +55,12 @@ public class PessoaTarefaBean implements BaseEntity {
 	}
 	public void setFinalizado(Boolean finalizado) {
 		this.finalizado = finalizado;
+	}
+	public Boolean getAtivo() {
+		return ativo;
+	}
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
 
 }

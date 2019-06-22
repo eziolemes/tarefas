@@ -1,5 +1,4 @@
 package br.com.ezio.tarefas.view;
-import java.util.List;
 
 /**
  * Classe que constroi os componentes para formar um documento HTML.
@@ -232,15 +231,40 @@ public class ComponentsHtml {
 	public String getLabel(LabelHtml label) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "<label for=\"" + label.getId() + "\">" + label.getValue() + "</label> " + pl);
+		sb.append(getTab(4) + "<label for=\"" + label.getId() + "\">" + label.getValue() + "</label> " + pl);
 
+		return sb.toString();
+	}
+	
+	public String getSelect(SelectHtml select) {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(getTab(4) + "<select ");
+		sb.append( (select.getId() != null ? " id=\"" + select.getId() + "\" " : "" ) );
+		sb.append( (select.getName() != null ? " name=\"" + select.getName() + "\" " : "" ) );
+		sb.append( (select.getClassCss() != null ? " class=\""+ select.getClassCss() + "\" " : "" ) );
+		sb.append( (select.getDisable() != null ? (select.getDisable() ? " disable " : "" ) : "" ) );
+		sb.append( (select.getRequired() != null ? (select.getRequired() ? " required " : "" ) : "" ) );
+		sb.append(" >" + pl);
+		
+		for(OptionHtml option : select.getOpcoes()) {
+			sb.append(getTab(5) + "<option ");
+			sb.append( (option.getValue() != null ? " value=\"" + option.getValue() + "\"" : "" ) );
+			sb.append( (option.getDisabled() != null ? (option.getDisabled() ? " disabled  " : "" ) : "" ) );
+			sb.append( (option.getSelected() != null ? (option.getSelected() ? " selected " : "" ) : "" ) );
+			sb.append(">");
+			sb.append( (option.getLabel() != null ? option.getLabel() : "" ) );
+			sb.append("</option>" + pl);
+		}
+		
+		sb.append(getTab(4) + "</select>" + pl);
 		return sb.toString();
 	}
 
 	public String getInput(InputHtml input) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getTab(3) + "<input ");
+		sb.append(getTab(4) + "<input ");
 		sb.append( (input.getType() != null ? " type=\"" + input.getType() + "\" " : "") );
 		sb.append( (input.getName() != null ? " name=\"" + input.getName() + "\" ": "") );
 		sb.append( (input.getId() != null ? " id=\"" + input.getId() + "\" ": "") );
@@ -256,11 +280,11 @@ public class ComponentsHtml {
 		return sb.toString();
 	}
 
-	public String getScriptConfirm(String message, String url) throws NullPointerException {
+	public String getScriptConfirm(String message, String url, String nameFunction) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(getTab(2) + "<script language=\"Javascript\">" + pl);
-		sb.append(getTab(3) + "function confirmacao(id) {" + pl);
+		sb.append(getTab(3) + "function " + nameFunction + "(id) {" + pl);
 		sb.append(getTab(4) + "var resposta = confirm(\"" + message + " Código: \"+id);" + pl);
 		sb.append(getTab(4) + "if(resposta == true) {" + pl);
 		sb.append(getTab(5) + "window.location.href = \"" + url + "\"+id;" + pl);

@@ -48,7 +48,8 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 		sb.append("       PESTAR_PERCENTUAL," + pl);
 		sb.append("       PESTAR_DATA_INICIO," + pl);
 		sb.append("       PESTAR_DATA_FIM," + pl);
-		sb.append("       PESTAR_FINALIZADO" + pl);
+		sb.append("       PESTAR_FINALIZADO," + pl);
+		sb.append("       PESTAR_ATIVO" + pl);
 		sb.append("FROM PESSOA_TAREFA" + pl);
 		sb.append("INNER JOIN PESSOA ON PESSOA.PES_ID = PESSOA_TAREFA.PESTAR_PESSOA_ID" + pl);
 		sb.append("INNER JOIN TAREFA ON TAREFA.TAR_ID = PESSOA_TAREFA.PESTAR_TAREFA_ID" + pl);
@@ -73,6 +74,7 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 			bean.setDataInicio(rs.getDate("PESTAR_DATA_INICIO"));
 			bean.setDataFim(rs.getDate("PESTAR_DATA_FIM"));
 			bean.setFinalizado( (rs.getString("PESTAR_FINALIZADO").equals("S") ? true : false) );
+			bean.setAtivo( (rs.getString("PESTAR_ATIVO").equals("S") ? true : false) );
 
 			lista.add(bean);
 		}

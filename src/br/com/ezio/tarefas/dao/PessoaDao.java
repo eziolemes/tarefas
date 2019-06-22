@@ -48,6 +48,21 @@ public class PessoaDao extends GenericDao<PessoaBean>{
 		conn.close();
 	}
 
+	public void updateStatus(PessoaBean bean) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("UPDATE PESSOA SET PES_ATIVO=? WHERE PES_ID=?;");
+
+		PreparedStatement ps = conn.prepareStatement(sql.toString());
+		ps.setString(1, (bean.getAtivo() ? "S" : "N" ));
+		ps.setInt(2, bean.getId());
+
+		ps.execute();
+
+		ps.close();
+		conn.close();
+	}
+
 	public PessoaBean findById(Integer id) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
@@ -101,6 +116,14 @@ public class PessoaDao extends GenericDao<PessoaBean>{
 		conn.close();
 
 		return lista;
+	}
+
+	public String where(String column, String comparator, String value) throws NullPointerException {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(column + comparator + value);
+		
+		return sb.toString();
 	}
 
 }

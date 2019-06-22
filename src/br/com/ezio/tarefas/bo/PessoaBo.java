@@ -37,27 +37,44 @@ public class PessoaBo implements Logica{
 			formularioEditarPessoa(request, response);
 
 		} else if(acao.equals("editar")) {
-			
+
 			editarPessoa(request, response);
-			
-		} else if(acao.equals("excluir")) {
-			
-			excluirPessoa(request, response);
-			
+
+		} else if(acao.equals("excluir") || acao.equals("ativar")) {
+
+			AlterarStatusPessoa(request, response);
+
+		} 
+
+	}
+
+	// try catch ok
+	private void AlterarStatusPessoa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		HtmlBo bo = new HtmlBo();
+
+		PessoaDao dao = new PessoaDao();
+		PessoaBean pessoa = new PessoaBean();
+
+		try {
+			Integer id = Integer.parseInt( request.getParameter("id"));
+			String acao = request.getParameter("acao");
+
+			pessoa.setId(id);
+			pessoa.setAtivo( (acao.equals("excluir") ? false : true) );
+			dao.updateStatus(pessoa);
+			response.sendRedirect("index?logica=PessoaBo&acao=listar&alerta=Pessoa Alterada com Sucesso!");
+		} catch(SQLException e) {
+			out.print( bo.criarMensagemJavascript("Erro ao tentar atualizar dados!") );
+			e.printStackTrace();
+		} catch(NumberFormatException e) {
+			out.print( bo.criarMensagemJavascript("Erro ao recuperar código da pessoa!") );
+			e.printStackTrace();
 		}
 
 	}
-	
-	private void excluirPessoa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		HtmlBo bo = new HtmlBo();
-		
-		PessoaDao dao = new PessoaDao();
-		
-		Integer id = Integer.parseInt( request.getParameter("id"));
-		
-	}
-	
+
+	// try catch ok
 	private void editarPessoa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		HtmlBo bo = new HtmlBo();
@@ -67,14 +84,18 @@ public class PessoaBo implements Logica{
 
 		try {
 			Integer id = Integer.parseInt( request.getParameter("id"));
-			
+			String ativo = request.getParameter("ativo");
+
+			if(ativo == null) ativo = "N";
+
 			pessoa.setId(id);
 			pessoa.setNome(request.getParameter("nome"));
+			pessoa.setAtivo( (ativo.equals("S") ? true : false) );
 
 			dao.update(pessoa);
 			response.sendRedirect("index?logica=PessoaBo&acao=listar&alerta=Pessoa Alterada com Sucesso!");
 		} catch (SQLException e) {
-			out.print( bo.criarMensagemJavascript("Erro ao tentar gravar dados!") );
+			out.print( bo.criarMensagemJavascript("Erro ao tentar atualizar dados!") );
 			e.printStackTrace();
 		} catch(NumberFormatException e) {
 			out.print( bo.criarMensagemJavascript("Erro ao recuperar código da pessoa!") );
@@ -82,6 +103,7 @@ public class PessoaBo implements Logica{
 		}
 	}
 
+	//try catch ok
 	private void gravarPessoa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		HtmlBo bo = new HtmlBo();
@@ -100,6 +122,7 @@ public class PessoaBo implements Logica{
 		}
 	}
 
+	//try catch ok
 	private void formularioEditarPessoa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 
