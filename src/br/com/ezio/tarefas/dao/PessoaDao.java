@@ -121,7 +121,7 @@ public class PessoaDao extends GenericDao<PessoaBean>{
 	public String where(String column, String comparator, String value) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(column + comparator + value);
+		sb.append("WHERE " + column + comparator + value);
 		
 		return sb.toString();
 	}

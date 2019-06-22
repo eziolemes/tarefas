@@ -46,7 +46,6 @@ public class TarefaDao extends GenericDao<TarefaBean> {
 
 		ps.close();
 		conn.close();
-		
 	}
 	
 	public void updateStatus(TarefaBean bean) throws SQLException {
@@ -122,7 +121,7 @@ public class TarefaDao extends GenericDao<TarefaBean> {
 	public String where(String column, String comparator, String value) throws NullPointerException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(column + comparator + value);
+		sb.append("WHERE " + column + comparator + value);
 		
 		return sb.toString();
 	}

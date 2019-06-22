@@ -137,11 +137,13 @@ public class HtmlBo {
 		dataLabel.setValue("Data Inicial:");
 
 		// Tarefas
-		OptionHtml[] tarefasArray = getTarefasList(listaTarefas, progresso.getTarefa().getId());
+		
+		//(progresso.getTarefa().getId() != null ? progresso.getTarefa().getId() : null)
+		OptionHtml[] tarefasArray = getTarefasList(listaTarefas, null );
 
 		SelectHtml tarefasSelect = new SelectHtml();
 		tarefasSelect.setId("tarefas");
-		tarefasSelect.setClassCss("form-group row");
+		tarefasSelect.setClassCss("form-control");
 		tarefasSelect.setName("idTarefa");
 		tarefasSelect.setRequired(true);
 		tarefasSelect.setOpcoes(tarefasArray);
@@ -151,11 +153,13 @@ public class HtmlBo {
 		tarefasLabel.setValue("Tarefas:");
 
 		// Pessoas
-		OptionHtml[] pessoasArray = getPessoasList(listaPessoas, progresso.getPessoa().getId());
+		
+		//(progresso.getPessoa().getId() != null ? progresso.getPessoa().getId() : null)
+		OptionHtml[] pessoasArray = getPessoasList(listaPessoas, null );
 
 		SelectHtml pessoasSelect = new SelectHtml();
 		pessoasSelect.setId("pessoas");
-		pessoasSelect.setClassCss("form-group row");
+		pessoasSelect.setClassCss("form-control");
 		pessoasSelect.setName("idPessoa");
 		pessoasSelect.setRequired(true);
 		pessoasSelect.setOpcoes(pessoasArray);
@@ -777,7 +781,7 @@ public class HtmlBo {
 		return sb.toString();
 	}
 
-	private OptionHtml[] getTarefasList(List<TarefaBean> lista, Integer idRequired) throws NullPointerException{
+	private OptionHtml[] getTarefasList(List<TarefaBean> lista, Integer idRequired) {
 		OptionHtml[] listaOption = new OptionHtml[lista.size()];
 
 		for (int i = 0; i < lista.size(); i++) {
