@@ -1,5 +1,6 @@
 package br.com.ezio.tarefas.bo;
 
+import java.text.ParseException;
 import java.util.List;
 
 import br.com.ezio.tarefas.bean.PessoaBean;
@@ -13,6 +14,7 @@ import br.com.ezio.tarefas.view.InputHtml;
 import br.com.ezio.tarefas.view.LabelHtml;
 import br.com.ezio.tarefas.view.OptionHtml;
 import br.com.ezio.tarefas.view.SelectHtml;
+import br.com.ezio.workcontrol.utils.ManipularData;
 
 public class HtmlBo {
 
@@ -29,18 +31,18 @@ public class HtmlBo {
 		header.setUrlIconImg("estilos/img/icone.png");
 
 		// cria os itens do menu
-		itensMenu = new String[5][5];
-		itensMenu[0][0] = "Início";     itensMenu[0][1] = "index";
-		itensMenu[1][0] = "Progresso";  itensMenu[1][1] = "index?logica=PessoaTarefaBo&acao=listar";
-		itensMenu[2][0] = "Tarefas"; itensMenu[2][1] = "index?logica=TarefaBo&acao=listar";
-		itensMenu[3][0] = "Pessoas";    itensMenu[3][1] = "index?logica=PessoaBo&acao=listar";
-		itensMenu[4][0] = "Contato";    itensMenu[4][1] = "index?acao=contato";
+		itensMenu = new String[3][2];
+		
+		itensMenu[0][0] = "Progresso";  itensMenu[0][1] = "index?logica=PessoaTarefaBo&acao=listar";
+		itensMenu[1][0] = "Tarefas";    itensMenu[1][1] = "index?logica=TarefaBo&acao=listar";
+		itensMenu[2][0] = "Pessoas";    itensMenu[2][1] = "index?logica=PessoaBo&acao=listar";
+		
 
 		ch = new ComponentsHtml("Atividades");
 	}
 
 	// PessoaTarefa
-	public String getProgressList(List<PessoaTarefaBean> listaPessoasTarefas, String alerta) throws NullPointerException {
+	public String getProgressList(List<PessoaTarefaBean> listaPessoasTarefas, String alerta) throws NullPointerException, ParseException {
 		StringBuilder sb = new StringBuilder();
 
 		String[] colunasTabela = new String[] {"Código", "Descrição", "Pessoa", "Percentual", "Data Início", "Data Fim", "Finalizado", "Ativo", "Ações"};
@@ -54,9 +56,9 @@ public class HtmlBo {
 			dados[i][1] = progresso.getTarefa().getDescricao();
 			dados[i][2] = progresso.getPessoa().getNome();
 			dados[i][3] = progresso.getPercentual();
-			dados[i][4] = progresso.getDataInicio();
-			dados[i][5] = progresso.getDataFim();
-			dados[i][6] = progresso.getFinalizado();
+			dados[i][4] = ManipularData.converterData(progresso.getDataInicio(), ManipularData.BR);
+			dados[i][5] = (progresso.getDataFim() != null ? (ManipularData.converterData(progresso.getDataFim(), ManipularData.BR)) : " - ");
+			dados[i][6] = (progresso.getFinalizado() ? "Sim" : "Não");
 			dados[i][7] = (progresso.getAtivo() ? "Sim" : "Não");
 			dados[i][8] = "<a href=\"index?logica=PessoaTarefaBo&acao=formularioEditar&id=" + progresso.getId() + "\" class=\"botaoTabela\"><img src=\"estilos/img/pencil.png\"></a>\n     " + 
 
@@ -137,9 +139,7 @@ public class HtmlBo {
 		dataLabel.setValue("Data Inicial:");
 
 		// Tarefas
-		
-		//(progresso.getTarefa().getId() != null ? progresso.getTarefa().getId() : null)
-		OptionHtml[] tarefasArray = getTarefasList(listaTarefas, null );
+		OptionHtml[] tarefasArray = getTarefasList(listaTarefas, (progresso != null ? progresso.getTarefa().getId() : null) );
 
 		SelectHtml tarefasSelect = new SelectHtml();
 		tarefasSelect.setId("tarefas");
@@ -153,9 +153,7 @@ public class HtmlBo {
 		tarefasLabel.setValue("Tarefas:");
 
 		// Pessoas
-		
-		//(progresso.getPessoa().getId() != null ? progresso.getPessoa().getId() : null)
-		OptionHtml[] pessoasArray = getPessoasList(listaPessoas, null );
+		OptionHtml[] pessoasArray = getPessoasList(listaPessoas, (progresso != null ? progresso.getPessoa().getId() : null) );
 
 		SelectHtml pessoasSelect = new SelectHtml();
 		pessoasSelect.setId("pessoas");
@@ -205,6 +203,9 @@ public class HtmlBo {
 		sb.append(ch.openDivHtml(divFormRow, 4));
 
 		if(progresso != null) {
+			
+			dataInicioInput.setValue(progresso.getDataInicio().toString());
+			
 			// input código
 			divFormCol.setClassCss("col-lg-2");
 
@@ -257,6 +258,7 @@ public class HtmlBo {
 		sb.append(ch.closeDivHtml(4));
 
 		if(progresso != null) {
+			
 			// percentual
 			InputHtml percentualInput = new InputHtml();
 			percentualInput.setId("percentual");
@@ -267,48 +269,47 @@ public class HtmlBo {
 			percentualInput.setPlaceholder("Informe Percentual atingido");
 			percentualInput.setRequired(true);
 			percentualInput.setValue(progresso.getPercentual().toString());
-			
+
 			LabelHtml percentualLabel = new LabelHtml();
 			percentualLabel.setId(percentualInput.getId());
 			percentualLabel.setValue("% Atingido:");
-			
+
 			// data fim
 			InputHtml dataFinalInput = new InputHtml();
 			dataFinalInput.setClassCss("form-control");
 			dataFinalInput.setId("dataFinal");
 			dataFinalInput.setName("dataFinal");
-			dataFinalInput.setRequired(true);
 			dataFinalInput.setType("date");
-			dataFinalInput.setValue( progresso.getDataFim().toString() );
-			
+			dataFinalInput.setValue( (progresso.getDataFim() != null ? progresso.getDataFim().toString() : "" ) );
+
 			LabelHtml dataFimLabel = new LabelHtml();
 			dataFimLabel.setId(dataFinalInput.getId());
 			dataFimLabel.setValue("Data Final:");
-			
+
 			// finalizado
 			InputHtml finalizadoInput = new InputHtml();
 			finalizadoInput.setId("finalizado");
 			finalizadoInput.setName("finalizado");
 			finalizadoInput.setType("checkbox");
 			finalizadoInput.setValue("S");
-			
+
 			LabelHtml finalizadoLabel = new LabelHtml();
 			finalizadoLabel.setId(finalizadoInput.getId());
 			finalizadoLabel.setValue("Finalizado");
-			
+
 			if(progresso.getFinalizado()) {
 				finalizadoInput.setChecked(true);
 			} else {
 				finalizadoInput.setChecked(false);
 			}
-			
+
 			// ativo
 			InputHtml ativoInput = new InputHtml();
 			ativoInput.setId("ativo");
 			ativoInput.setName("ativo");
 			ativoInput.setType("checkbox");
 			ativoInput.setValue("S");
-			
+
 			LabelHtml ativoLabel = new LabelHtml();
 			ativoLabel.setId( ativoLabel.getId() );
 			ativoLabel.setValue("Ativo");
@@ -318,33 +319,35 @@ public class HtmlBo {
 			} else {
 				ativoInput.setChecked(false);
 			}
-			
+
 			divFormCol.setClassCss("col-lg-2");
 			sb.append(ch.openDivHtml(divFormRow, 4));
-			
+
 			sb.append(ch.openDivHtml(divFormCol, 5));
 			sb.append(ch.getLabel(percentualLabel));
 			sb.append(ch.getInput(percentualInput));
 			sb.append(ch.closeDivHtml(5));
-			
+
 			sb.append(ch.openDivHtml(divFormCol, 5));
 			sb.append(ch.getLabel(dataFimLabel));
 			sb.append(ch.getInput(dataFinalInput));
 			sb.append(ch.closeDivHtml(5));
-			
+
+			sb.append(ch.closeDivHtml(4));
+
+			divFormCol.setClassCss("col-lg-2");
+
 			sb.append(ch.openDivHtml(divFormCol, 5));
 			sb.append(ch.getInput(finalizadoInput));
 			sb.append(ch.getLabel(finalizadoLabel));
 			sb.append(ch.closeDivHtml(5));
-			
-			sb.append(ch.closeDivHtml(4));
 
-			divFormCol.setClassCss("col-lg-2");
 			sb.append(ch.openDivHtml(divFormRow, 4));
 			sb.append(ch.openDivHtml(divFormCol, 5));
 			sb.append(ch.getInput(ativoInput));
 			sb.append(ch.getLabel(ativoLabel));
 			sb.append(ch.closeDivHtml(5));
+
 			sb.append(ch.closeDivHtml(4));
 		}
 
@@ -831,11 +834,8 @@ public class HtmlBo {
 		alertaDiv.setStyle("display: none;");
 
 		sb.append("<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\">\n");
-		//sb.append("  window.alert(\"" + mensagem + "\");" + pl);
+		sb.append("  window.alert(\"" + mensagem + "\");\n");
 		sb.append("  javascript:history.go(-1)\n");
-		sb.append(ch.openDivHtml(alertaDiv, 3));
-		sb.append(mensagem);
-		sb.append(ch.closeDivHtml(3));
 		sb.append("</SCRIPT>\n");
 
 		return sb.toString();

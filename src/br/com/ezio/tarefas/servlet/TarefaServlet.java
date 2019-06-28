@@ -25,6 +25,7 @@ public class TarefaServlet extends HttpServlet {
 		doExecute(request, response);
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doExecute(request, response);
 	}
@@ -41,9 +42,9 @@ public class TarefaServlet extends HttpServlet {
 		String nomeDaClasse = "br.com.ezio.tarefas.bo." + parametro;
 		
 		try {
-			Class classe = Class.forName(nomeDaClasse);
+			Class<?> classe = Class.forName(nomeDaClasse);
 			
-			Logica logica = (Logica) classe.newInstance();
+			Logica logica = (Logica) classe.getConstructor().newInstance();
 			logica.executa(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

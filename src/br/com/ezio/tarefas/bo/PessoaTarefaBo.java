@@ -20,6 +20,7 @@ import br.com.ezio.tarefas.bean.TarefaBean;
 import br.com.ezio.tarefas.dao.PessoaDao;
 import br.com.ezio.tarefas.dao.PessoaTarefaDao;
 import br.com.ezio.tarefas.dao.TarefaDao;
+import br.com.ezio.workcontrol.utils.Calcular;
 import br.com.ezio.workcontrol.utils.ManipularData;
 
 public class PessoaTarefaBo implements Logica {
@@ -95,21 +96,36 @@ public class PessoaTarefaBo implements Logica {
 			Integer id = Integer.parseInt( request.getParameter("id"));
 			Integer idTarefa = Integer.parseInt( request.getParameter("idTarefa"));
 			Integer idPessoa = Integer.parseInt( request.getParameter("idPessoa"));
-			BigDecimal percentual = new BigDecimal( request.getParameter("percentual") );
-			Date dataInicio = ManipularData.converterData(request.getParameter("dataInicio"), ManipularData.US);
-			Date dataFim = ManipularData.converterData(request.getParameter("dataFinal"), ManipularData.US);
+			BigDecimal percentual = new BigDecimal( request.getParameter("percentual").replace(',', '.') );
+			String dataInicio = request.getParameter("dataInicio");
+			String dataFim = request.getParameter("dataFinal");
 			String finalizado = request.getParameter("finalizado");
 			String ativo = request.getParameter("ativo");
 
 			if(ativo == null) ativo = "N";
 			if(finalizado == null) finalizado = "N";
 
+			PessoaBean pessoa = new PessoaBean();
+			TarefaBean tarefa = new TarefaBean(); 
+			
+			pessoa.setId(idPessoa);
+			tarefa.setId(idTarefa);
+			
+			/*
+			Boolean percValido = Calcular.validarIntervalo(percentual);
+			
+			if(percValido) {
+				progresso.setPercentual(percentual);
+			} else {
+				out.print( bo.criarMensagemJavascript("Percentual é inválido!"));
+			}
+			*/
 			progresso.setId(id);
-			progresso.getTarefa().setId(idTarefa);
-			progresso.getPessoa().setId(idPessoa);
+			progresso.setTarefa(tarefa);
+			progresso.setPessoa(pessoa);
 			progresso.setPercentual(percentual);
-			progresso.setDataInicio(dataInicio);
-			progresso.setDataFim(dataFim);
+			progresso.setDataInicio( ManipularData.converterData(dataInicio, ManipularData.US) );
+			progresso.setDataFim( (!dataFim.isEmpty() ? (ManipularData.converterData(dataFim, ManipularData.US)) : null) );
 			progresso.setFinalizado( (finalizado.equals("S") ? true : false) );
 			progresso.setAtivo( (ativo.equals("S") ? true : false) );
 
@@ -119,7 +135,7 @@ public class PessoaTarefaBo implements Logica {
 			out.print( bo.criarMensagemJavascript("Erro ao tentar atualizar dados!") );
 			e.printStackTrace();
 		} catch(NumberFormatException e) {
-			out.print( bo.criarMensagemJavascript("Erro ao recuperar código do progresso!") );
+			out.print( bo.criarMensagemJavascript("Percentual informado é inválido!") );
 			e.printStackTrace();
 		} catch (NullPointerException e) {
 			out.print( bo.criarMensagemJavascript("Informe data!") );
@@ -165,13 +181,21 @@ public class PessoaTarefaBo implements Logica {
 		PessoaTarefaBean progresso = new PessoaTarefaBean();
 
 		try {
-			progresso.setDataInicio( ManipularData.converterData(request.getParameter("dataInicio"), ManipularData.US) );
-			progresso.getPessoa().setId( Integer.parseInt( request.getParameter("idPessoa") ) );
-			progresso.getTarefa().setId( Integer.parseInt( request.getParameter("idTarefa") ) );
+			PessoaBean pessoa = new PessoaBean();
+			pessoa.setId( Integer.parseInt( request.getParameter("idPessoa") ) );
+			
+			TarefaBean tarefa = new TarefaBean();
+			tarefa.setId( Integer.parseInt( request.getParameter("idTarefa") ) );
 
+			progresso.setDataInicio( ManipularData.converterData(request.getParameter("dataInicio"), ManipularData.US) );
+			progresso.setPessoa( pessoa  );
+			progresso.setTarefa( tarefa );
+			progresso.setPercentual( new BigDecimal("0.0") );
+			progresso.setFinalizado(false);
+			progresso.setAtivo(true);
 
 			dao.insert(progresso);
-			response.sendRedirect("index?logica=TarefaBo&acao=listar&alerta=Tarefa Cadastrada com Sucesso!");
+			response.sendRedirect("index?logica=PessoaTarefaBo&acao=listar&alerta=Progresso Cadastrado com Sucesso!");
 		} catch (SQLException e) {
 			out.print( bo.criarMensagemJavascript("Erro ao tentar gravar dados!") );
 			e.printStackTrace();
@@ -219,7 +243,10 @@ public class PessoaTarefaBo implements Logica {
 			lista = dao.find(null);
 			out.print(bo.getProgressList(lista, alerta));
 		} catch (SQLException e) {
-			out.print(bo.getProgressList(lista, "Erro ao buscar dados!\nTente novamente."));
+			out.print(bo.criarMensagemJavascript("Erro ao consultar dados!"));
+			e.printStackTrace();
+		} catch (ParseException e) {
+			out.print(bo.criarMensagemJavascript("Data informada é inválida!"));
 			e.printStackTrace();
 		}
 	}

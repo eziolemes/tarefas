@@ -1,12 +1,12 @@
 package br.com.ezio.tarefas.dao;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ezio.tarefas.bean.PessoaBean;
 import br.com.ezio.tarefas.bean.PessoaTarefaBean;
 import br.com.ezio.tarefas.bean.TarefaBean;
 
@@ -16,7 +16,7 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 	public void insert(PessoaTarefaBean bean) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("INSERT INTO PESSOA_TAREFA(PESTAR_TAREFA_ID, PESTAR_PESSOA_ID, PESTAR_PERCENTUAL, PESTAR_DATA_INICIO, PESTAR_DATA_FIM, PESTAR_FINALIZADO)");
+		sql.append("INSERT INTO PESSOA_TAREFA(PESTAR_TAREFA_ID, PESTAR_PESSOA_ID, PESTAR_PERCENTUAL, PESTAR_DATA_INICIO, PESTAR_FINALIZADO, PESTAR_ATIVO)");
 		sql.append(" VALUES(?, ?, ?, ?, ?, ?);");
 
 		PreparedStatement ps = conn.prepareStatement(sql.toString());
@@ -24,8 +24,8 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 		ps.setInt(2, bean.getPessoa().getId());
 		ps.setBigDecimal(3, bean.getPercentual());
 		ps.setDate(4, new java.sql.Date( bean.getDataInicio().getTime() ));
-		ps.setDate(5, new java.sql.Date( bean.getDataFim().getTime() ));
-		ps.setString(6, (bean.getFinalizado() ? "S" : "N") );
+		ps.setString(5, (bean.getFinalizado() ? "S" : "N") );
+		ps.setString(6, (bean.getAtivo() ? "S" : "N") );
 
 		ps.execute();
 		ps.close();
@@ -44,7 +44,7 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 		sql.append("       PESTAR_DATA_FIM=?, " + pl);
 		sql.append("       PESTAR_FINALIZADO=?, " + pl);
 		sql.append("       PESTAR_ATIVO=? " + pl);
-		sql.append("WHERE TAR_ID=?;");
+		sql.append("WHERE PESTAR_ID=?;");
 		
 		PreparedStatement ps = conn.prepareStatement(sql.toString());
 		ps.setInt(1, bean.getTarefa().getId());
@@ -102,11 +102,20 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 
 		PessoaTarefaBean bean = new PessoaTarefaBean();
 
+		rs.next();
+		
+		PessoaBean pessoa = new PessoaBean();
+		TarefaBean tarefa = new TarefaBean();
+		
+		pessoa.setId(rs.getInt("PESTAR_PESSOA_ID"));
+		pessoa.setNome(rs.getString("PES_NOME"));
+		
+		tarefa.setId(rs.getInt("PESTAR_TAREFA_ID"));
+		tarefa.setDescricao(rs.getString("TAR_DESCRICAO"));
+		
 		bean.setId(rs.getInt("PESTAR_ID"));
-		bean.getTarefa().setId(rs.getInt("PESTAR_TAREFA_ID"));
-		bean.getTarefa().setDescricao(rs.getString("TAR_DESCRICAO"));
-		bean.getPessoa().setId(rs.getInt("PESTAR_PESSOA_ID"));
-		bean.getPessoa().setNome(rs.getString("PES_NOME"));
+		bean.setTarefa(tarefa);
+		bean.setPessoa(pessoa);
 		bean.setPercentual(rs.getBigDecimal("PESTAR_PERCENTUAL"));
 		bean.setDataInicio(rs.getDate("PESTAR_DATA_INICIO"));
 		bean.setDataFim(rs.getDate("PESTAR_DATA_FIM"));
@@ -148,18 +157,24 @@ public class PessoaTarefaDao extends GenericDao<PessoaTarefaBean>{
 
 		while(rs.next()) {
 			PessoaTarefaBean bean = new PessoaTarefaBean();
+			PessoaBean pessoa = new PessoaBean();
+			TarefaBean tarefa = new TarefaBean();
 
+			tarefa.setId(rs.getInt("PESTAR_TAREFA_ID"));
+			tarefa.setDescricao(rs.getString("TAR_DESCRICAO"));
+			
+			pessoa.setId(rs.getInt("PESTAR_PESSOA_ID"));
+			pessoa.setNome(rs.getString("PES_NOME"));
+			
 			bean.setId(rs.getInt("PESTAR_ID"));
-			bean.getTarefa().setId(rs.getInt("PESTAR_TAREFA_ID"));
-			bean.getTarefa().setDescricao(rs.getString("TAR_DESCRICAO"));
-			bean.getPessoa().setId(rs.getInt("PESTAR_PESSOA_ID"));
-			bean.getPessoa().setNome(rs.getString("PES_NOME"));
+			bean.setTarefa(tarefa);
+			bean.setPessoa(pessoa);
 			bean.setPercentual(rs.getBigDecimal("PESTAR_PERCENTUAL"));
 			bean.setDataInicio(rs.getDate("PESTAR_DATA_INICIO"));
 			bean.setDataFim(rs.getDate("PESTAR_DATA_FIM"));
 			bean.setFinalizado( (rs.getString("PESTAR_FINALIZADO").equals("S") ? true : false) );
 			bean.setAtivo( (rs.getString("PESTAR_ATIVO").equals("S") ? true : false) );
-
+			
 			lista.add(bean);
 		}
 
