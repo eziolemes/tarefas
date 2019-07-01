@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-        
-    <wb-module deploy-name="tarefas">
-                
-        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-                
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-                
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
-        <dependent-module archiveName="workcontrol.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/workcontrol/workcontrol">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-                
-        <property name="context-root" value="tarefas"/>
-                
-        <property name="java-output-path" value="/tarefas/build/classes"/>
             
-    </wb-module>
     
+    <wb-module deploy-name="tarefas">
+                        
+        
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+                        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+                        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+                        
+        
+        <property name="context-root" value="tarefas"/>
+                        
+        
+        <property name="java-output-path" value="/tarefas/build/classes"/>
+                    
+    
+    </wb-module>
+        
+
 </project-modules>
