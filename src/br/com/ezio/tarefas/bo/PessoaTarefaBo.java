@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,8 +19,7 @@ import br.com.ezio.tarefas.bean.TarefaBean;
 import br.com.ezio.tarefas.dao.PessoaDao;
 import br.com.ezio.tarefas.dao.PessoaTarefaDao;
 import br.com.ezio.tarefas.dao.TarefaDao;
-import br.com.ezio.workcontrol.utils.Calcular;
-import br.com.ezio.workcontrol.utils.ManipularData;
+import br.com.startup.workcontrol.utils.ManipularData;
 
 public class PessoaTarefaBo implements Logica {
 

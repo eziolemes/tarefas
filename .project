@@ -3,6 +3,7 @@
 	<name>tarefas</name>
 	<comment></comment>
 	<projects>
+		<project>workcontrol_bkp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

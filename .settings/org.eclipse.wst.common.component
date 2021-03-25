@@ -11,6 +11,9 @@
                         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+        <dependent-module archiveName="workcontrol_bkp.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/workcontrol_bkp/workcontrol_bkp">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
                         
         
         <property name="context-root" value="tarefas"/>
